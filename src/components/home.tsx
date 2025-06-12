@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+  import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import Profile from "@/components/Profile";
@@ -49,49 +49,8 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-<<<<<<< HEAD
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { user, logout: logoutAction } = useAuth();
-
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
-  const aciveUser = useSelector(
-    (state: RootState) => state.user
-  );
-
-  const handleLogout = () => {
-  const { id, dismiss } = toast({
-    title: "Confirm Logout",
-    description: "Are you sure you want to log out?",
-    action: (
-      <div className="flex gap-2 mt-2">
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => {
-            dispatch(logout());
-            navigate("/login", { replace: true });
-            dismiss(); // Close the toast on success
-          }}
-        >
-          Yes
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            dismiss(); // Just close the toast
-          }}
-        >
-          Cancel
-        </Button>
-      </div>
-    ),
-=======
   const [personalInfo, setPersonalInfo] = useState({
     name: ""
->>>>>>> 559b041e58389baa7c5d45f32623dc104179d10a
   });
   const navigate = useNavigate();
   const { logout: logoutAction } = useAuth();
