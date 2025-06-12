@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import {
   Select,
   SelectContent,
@@ -30,12 +31,15 @@ import KeyMetricsPanel from "./dashboard/KeyMetricsPanel";
 import DataEntryForm from "./dashboard/DataEntryForm";
 import EnvironmentalMonitor from "./dashboard/EnvironmentalMonitor";
 import ReportGenerator from "./dashboard/ReportGenerator";
-import { useAppDispatch, useAppSelector } from "../redux/Hooks/Hooks";
 import { logout } from "../redux/slices/login/loginSlice";
-import {fetchUserProfile} from "../redux/slices/profile/userSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
 import { toast } from "./ui/use-toast";
+import Records from "./dashboard/Records";
+import { useAppDispatch, useAppSelector } from "../redux/Hooks/Hooks";
+
+// Redux
+import { fetchUserProfile } from "../redux/slices/profile/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 interface HomeProps {
   initialTab?: string;
@@ -45,53 +49,61 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { user, logout: logoutAction } = useAuth();
-
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
-  const aciveUser = useSelector(
-    (state: RootState) => state.user
-  );
-
-  // const handleLogout = () => {
-  //   const confirmation = confirm("loging Out");
-  //   if (confirmation) {
-  //     dispatch(logout());
-  //     navigate("/login", { replace: true });
-  //   }
-  // };
-  const handleLogout = () => {
-  const { id, dismiss } = toast({
-    title: "Confirm Logout",
-    description: "Are you sure you want to log out?",
-    action: (
-      <div className="flex gap-2 mt-2">
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => {
-            dispatch(logout());
-            navigate("/login", { replace: true });
-            dismiss(); // Close the toast on success
-          }}
-        >
-          Yes
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            dismiss(); // Just close the toast
-          }}
-        >
-          Cancel
-        </Button>
-      </div>
-    ),
+  const [personalInfo, setPersonalInfo] = useState({
+    name: ""
   });
-};
+  const navigate = useNavigate();
+  const { logout: logoutAction } = useAuth();
+
+  // Redux state for profile
+  const dispatch = useDispatch<AppDispatch>();
+  const { profile, loading, error, updateSuccess, passwordChangeSuccess } =
+    useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (profile) {
+      setPersonalInfo({
+        name: profile.name || ""
+      });
+    }
+  }, [profile]);
+
+
+
+  const handleLogout = () => {
+    const { id, dismiss } = toast({
+      title: "Confirm Logout",
+      description: "Are you sure you want to log out?",
+      action: (
+        <div className="flex gap-2 mt-2">
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => {
+              dispatch(logout());
+              navigate("/login", { replace: true });
+              dismiss(); // Close the toast on success
+            }}
+          >
+            Yes
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              dismiss(); // Just close the toast
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      ),
+    });
+  };
 
   // Check if screen is mobile on initial render and when window resizes
 
@@ -102,7 +114,7 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
         setSidebarCollapsed(true);
       }
     };
-    
+
     checkIfMobile();
     window.addEventListener("resize", checkIfMobile);
 
@@ -155,6 +167,14 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
                 icon={<DataIcon />}
                 active={activeTab === "data-entry"}
                 onClick={() => setActiveTab("data-entry")}
+                sidebarCollapsed={false}
+              />
+              <NavItem
+                id="data-records"
+                label="Data Records"
+                icon={<RecordsIcon />}
+                active={activeTab === "data-records"}
+                onClick={() => setActiveTab("data-records")}
                 sidebarCollapsed={false}
               />
               <NavItem
@@ -257,14 +277,14 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
             onClick={() => setActiveTab("data-entry")}
             sidebarCollapsed={sidebarCollapsed}
           />
-          {/* <NavItem
-            id="data-record"
-            label="Data Record"
-            icon={<DataIcon />}
-            active={activeTab === "data-record"}
-            onClick={() => setActiveTab("data-record")}
+          <NavItem
+            id="data-records"
+            label="Data Records"
+            icon={<RecordsIcon />}
+            active={activeTab === "data-records"}
+            onClick={() => setActiveTab("data-records")}
             sidebarCollapsed={sidebarCollapsed}
-          /> */}
+          />
           <NavItem
             id="environment"
             label="Environment"
@@ -313,17 +333,17 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={
-                        user?.avatar ||
+                        personalInfo?.name.split(" ").slice(0,2).join(" ") ||
                         "https://api.dicebear.com/7.x/avataaars/svg?seed=farmer"
                       }
-                      alt={user?.name || "User"}
+                      alt={personalInfo.name || "User"}
                     />
                     <AvatarFallback>
-                      {user?.name?.substring(0, 2).toUpperCase() || "JD"}
+                      {personalInfo?.name?.substring(0, 2).toUpperCase() || "JD"}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden md:inline">
-                    {user?.name || "John Doe"}
+                    {personalInfo?.name.split(" ").slice(0,2).join(" ") || "Loading..."}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
@@ -364,6 +384,16 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
               <Card>
                 <CardContent className="pt-6">
                   <DataEntryForm />
+                </CardContent>
+              </Card>
+            </div>
+          )}
+          {activeTab === "data-records" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">All Records</h1>
+              <Card>
+                <CardContent className="pt-6">
+                  <Records />
                 </CardContent>
               </Card>
             </div>
@@ -544,7 +574,7 @@ const NavItem = ({ id, label, icon, active, onClick, sidebarCollapsed }) => {
       variant={active ? "secondary" : "ghost"}
       className={`justify-${sidebarCollapsed ? "center" : "start"} w-full ${
         active ? "font-medium" : ""
-      } text-white hover:bg-navy-light relative`}
+      } text-white hover:text-blue-500 hover:bg-white relative`}
       onClick={onClick}
       title={sidebarCollapsed ? label : undefined}
       onMouseEnter={() => setIsHovered(true)}
@@ -598,6 +628,7 @@ const DataIcon = () => (
     <line x1="10" y1="9" x2="8" y2="9"></line>
   </svg>
 );
+const RecordsIcon = () => <ChecklistIcon />;
 
 const EnvironmentIcon = () => (
   <svg

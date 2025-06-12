@@ -202,18 +202,14 @@ const Profile = () => {
     }
   };
 
-  // Note: The "Save All Changes" button in CardFooter is not specific to a single form.
-  // In a multi-tabbed form, "Save All Changes" often implies saving the currently active tab's changes.
-  // For simplicity, we'll keep the individual form submit buttons and not add complex logic for "Save All Changes"
-  // from the footer unless specified. If you want it to trigger the currently active tab's save,
-  // you'd need conditional logic inside that handler.
+ 
   const handleSaveAllChanges = () => {
     if (activeTab === "personal") {
       handlePersonalSubmit(new Event('submit') as unknown as React.FormEvent);
     } else if (activeTab === "security") {
       handlePasswordChangeSubmit(new Event('submit') as unknown as React.FormEvent);
     }
-    // Notifications would need their own submit handler if server-side.
+   
   };
 
   return (
