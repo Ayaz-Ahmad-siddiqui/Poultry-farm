@@ -1,0 +1,884 @@
+{
+	"info": {
+		"_postman_id": "586ee655-afb2-4045-8572-ae6a0d01b060",
+		"name": "Poltry",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34038304",
+		"_collection_link": "https://v-quran-deelopment.postman.co/workspace/V-Quran-Deelopment-Workspace~9a42f656-31f9-4a50-8741-ff36afc9d419/collection/34038304-586ee655-afb2-4045-8572-ae6a0d01b060?action=share&source=collection_link&creator=34038304"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Usman\",\r\n  \"email\": \"usman@example.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{PV_BASE_URL}}/auth/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "sign in",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"usman@example.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/auth/signin"
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTQ5NjMsImV4cCI6MTc1MTA0Njk2M30.UW-PyR1876gJ6QdNcqvxIjYwEll0MHhc19dnZD3s64E\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/auth/refresh-token"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTQ5NjMsImV4cCI6MTc1MTA0Njk2M30.UW-PyR1876gJ6QdNcqvxIjYwEll0MHhc19dnZD3s64E\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/users/me"
+					},
+					"response": []
+				},
+				{
+					"name": "update-profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Mr. Usman Dev\",\r\n  \"phoneNo\": \"03001234567\",\r\n  \"position\":\"manager\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/users/update"
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"oldPassword\": \"123456\",\r\n  \"newPassword\": \"1234567\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/users/change-password"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feed Usage",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/feed-usage"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/feed-usage"
+					},
+					"response": []
+				},
+				{
+					"name": "findOne",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/feed-usage/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"feed-usage",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_type\": \"Grower\",\r\n  \"qty\": 100,\r\n  \"notes\": \"Morning feeding Grower\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/feed-usage/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"feed-usage",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/feed-usage/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"feed-usage",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Envoironments",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"collection_date\": \"2025-05-29\",\r\n  \"temperature\": 50,\r\n  \"humidity\": 50,\r\n  \"collection_time\": \"08:30:00\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/environment"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/environment"
+					},
+					"response": []
+				},
+				{
+					"name": "findOne",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/environment/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"environment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"collection_date\": \"2025-05-29\",\r\n  \"temperature\": 50,\r\n  \"humidity\": 50,\r\n  \"collection_time\": \"08:30:00\"  \r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/environment/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"environment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/environment/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"environment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Egg Production",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"collection_date\": \"2025-05-29\",\r\n  \"total_eggs\": 50,\r\n  \"broken_eggs\": 10,\r\n  \"collection_time\": \"08:30:00\",\r\n  \"notes\": \"test notes\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/egg-production"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/egg-production"
+					},
+					"response": []
+				},
+				{
+					"name": "findOne",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/egg-production/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"egg-production",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"collection_date\": \"2025-05-30\",\r\n  \"total_eggs\": 40,\r\n  \"broken_eggs\": 30,\r\n  \"collection_time\": \"09:30:00\",\r\n  \"notes\": \"update notes\"    \r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/egg-production/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"egg-production",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/egg-production/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"egg-production",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mortality Rate",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"mortality_date\": \"2025-05-29\",\r\n  \"no_of_deaths\": 10,\r\n  \"cause_of_death\": \"Disease\",\r\n  \"location_farm\": \"Lahore\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/mortality-rate"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": "{{PV_BASE_URL}}/mortality-rate"
+					},
+					"response": []
+				},
+				{
+					"name": "findOne",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/mortality-rate/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"mortality-rate",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"mortality_date\": \"2025-05-30\",\r\n  \"no_of_deaths\": 5,\r\n  \"cause_of_death\": \"Disease\",\r\n  \"location_farm\": \"Lahore, Punjab, Pakistan\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/mortality-rate/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"mortality-rate",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNtYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NDg0NTUwNjcsImV4cCI6MTc1MTA0NzA2N30.LM8jdGF4oDu2YudU_W3UEnkSxp1F2YOxXItV99kRnFo"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"feed_date\": \"2025-05-29\",\r\n  \"feed_type\": \"Starter\",\r\n  \"qty\": 100.50,\r\n  \"time_of_feeding\": \"08:30:00\",\r\n  \"notes\": \"Morning feeding session\"\r\n}"
+						},
+						"url": {
+							"raw": "{{PV_BASE_URL}}/egg-production/:id",
+							"host": [
+								"{{PV_BASE_URL}}"
+							],
+							"path": [
+								"egg-production",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

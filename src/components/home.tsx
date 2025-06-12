@@ -1,0 +1,663 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import Profile from "@/components/Profile";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Bell, Settings, LogOut, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+
+import KeyMetricsPanel from "./dashboard/KeyMetricsPanel";
+import DataEntryForm from "./dashboard/DataEntryForm";
+import EnvironmentalMonitor from "./dashboard/EnvironmentalMonitor";
+import ReportGenerator from "./dashboard/ReportGenerator";
+import { useAppDispatch, useAppSelector } from "../redux/Hooks/Hooks";
+import { logout } from "../redux/slices/login/loginSlice";
+import {fetchUserProfile} from "../redux/slices/profile/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { toast } from "./ui/use-toast";
+
+interface HomeProps {
+  initialTab?: string;
+}
+
+const Home = ({ initialTab = "dashboard" }: HomeProps) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { user, logout: logoutAction } = useAuth();
+
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const aciveUser = useSelector(
+    (state: RootState) => state.user
+  );
+
+  // const handleLogout = () => {
+  //   const confirmation = confirm("loging Out");
+  //   if (confirmation) {
+  //     dispatch(logout());
+  //     navigate("/login", { replace: true });
+  //   }
+  // };
+  const handleLogout = () => {
+  const { id, dismiss } = toast({
+    title: "Confirm Logout",
+    description: "Are you sure you want to log out?",
+    action: (
+      <div className="flex gap-2 mt-2">
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            dispatch(logout());
+            navigate("/login", { replace: true });
+            dismiss(); // Close the toast on success
+          }}
+        >
+          Yes
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            dismiss(); // Just close the toast
+          }}
+        >
+          Cancel
+        </Button>
+      </div>
+    ),
+  });
+};
+
+  // Check if screen is mobile on initial render and when window resizes
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setSidebarCollapsed(true);
+      }
+    };
+    
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
+
+  return (
+    <div className="flex h-screen bg-background">
+      {/* Mobile Navigation Toggle */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden absolute top-4 left-4 z-30"
+        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+
+      {/* Mobile Sidebar Sheet - Only for very small screens */}
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden absolute top-4 left-4 z-10"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-64 p-0 bg-navy">
+          <div className="flex flex-col p-4">
+            <div className="flex items-center gap-2 mb-8">
+              <img src="/vite.svg" alt="Farm Logo" className="h-8 w-8" />
+              <h1 className="text-xl font-bold text-white">Poultry Farm</h1>
+            </div>
+            <nav className="flex flex-col gap-1">
+              <NavItem
+                id="dashboard"
+                label="Dashboard"
+                icon={<HomeIcon />}
+                active={activeTab === "dashboard"}
+                onClick={() => setActiveTab("dashboard")}
+                sidebarCollapsed={false}
+              />
+              <NavItem
+                id="data-entry"
+                label="Data Entry"
+                icon={<DataIcon />}
+                active={activeTab === "data-entry"}
+                onClick={() => setActiveTab("data-entry")}
+                sidebarCollapsed={false}
+              />
+              <NavItem
+                id="environment"
+                label="Environment"
+                icon={<EnvironmentIcon />}
+                active={activeTab === "environment"}
+                onClick={() => setActiveTab("environment")}
+                sidebarCollapsed={false}
+              />
+              <NavItem
+                id="reports"
+                label="Reports"
+                icon={<ReportIcon />}
+                active={activeTab === "reports"}
+                onClick={() => setActiveTab("reports")}
+                sidebarCollapsed={false}
+              />
+              <NavItem
+                id="settings"
+                label="Settings"
+                icon={<Settings className="h-5 w-5" />}
+                active={activeTab === "settings"}
+                onClick={() => setActiveTab("settings")}
+                sidebarCollapsed={false}
+              />
+            </nav>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Desktop Sidebar */}
+      <aside
+        className={`fixed md:relative h-full z-20 transition-all duration-300 ease-in-out ${
+          sidebarCollapsed ? "w-16" : "w-64"
+        } border-r bg-navy shadow-md ${
+          isMobile && !sidebarCollapsed
+            ? "translate-x-0"
+            : isMobile
+            ? "-translate-x-full"
+            : "translate-x-0"
+        }`}
+      >
+        <div className="flex items-center gap-2 mb-8 p-4">
+          <img src="/vite.svg" alt="Farm Logo" className="h-8 w-8" />
+          {!sidebarCollapsed && (
+            <h1 className="text-xl font-bold text-white">Poultry Farm</h1>
+          )}
+        </div>
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          className="absolute -right-3 top-10 bg-navy-light text-white rounded-full p-1 shadow-md border border-navy-light hidden md:block"
+        >
+          {sidebarCollapsed ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="13 17 18 12 13 7"></polyline>
+              <polyline points="6 17 11 12 6 7"></polyline>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="11 17 6 12 11 7"></polyline>
+              <polyline points="18 17 13 12 18 7"></polyline>
+            </svg>
+          )}
+        </button>
+        <nav className="flex flex-col gap-1 p-2">
+          <NavItem
+            id="dashboard"
+            label="Dashboard"
+            icon={<HomeIcon />}
+            active={activeTab === "dashboard"}
+            onClick={() => setActiveTab("dashboard")}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+          <NavItem
+            id="data-entry"
+            label="Data Entry"
+            icon={<DataIcon />}
+            active={activeTab === "data-entry"}
+            onClick={() => setActiveTab("data-entry")}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+          {/* <NavItem
+            id="data-record"
+            label="Data Record"
+            icon={<DataIcon />}
+            active={activeTab === "data-record"}
+            onClick={() => setActiveTab("data-record")}
+            sidebarCollapsed={sidebarCollapsed}
+          /> */}
+          <NavItem
+            id="environment"
+            label="Environment"
+            icon={<EnvironmentIcon />}
+            active={activeTab === "environment"}
+            onClick={() => setActiveTab("environment")}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+          <NavItem
+            id="reports"
+            label="Reports"
+            icon={<ReportIcon />}
+            active={activeTab === "reports"}
+            onClick={() => setActiveTab("reports")}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+          <NavItem
+            id="settings"
+            label="Settings"
+            icon={<Settings className="h-5 w-5" />}
+            active={activeTab === "settings"}
+            onClick={() => setActiveTab("settings")}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main
+        className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 w-full`}
+      >
+        {/* Header */}
+        <header className="h-16 border-b border-primary/20 flex items-center justify-between px-4 md:px-6">
+          <h2 className="text-lg font-medium">Green Valley Poultry Farm</h2>
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2"
+                  size="sm"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={
+                        user?.avatar ||
+                        "https://api.dicebear.com/7.x/avataaars/svg?seed=farmer"
+                      }
+                      alt={user?.name || "User"}
+                    />
+                    <AvatarFallback>
+                      {user?.name?.substring(0, 2).toUpperCase() || "JD"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:inline">
+                    {user?.name || "John Doe"}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setActiveTab("profile");
+                    navigate("/profile");
+                  }}
+                >
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setActiveTab("settings")}>
+                  Farm Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-4 md:p-6">
+          {activeTab === "dashboard" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">Dashboard</h1>
+              <KeyMetricsPanel />
+            </div>
+          )}
+
+          {activeTab === "data-entry" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">Data Entry</h1>
+              <Card>
+                <CardContent className="pt-6">
+                  <DataEntryForm />
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "environment" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">Environmental Monitoring</h1>
+              <Card>
+                <CardContent className="pt-6">
+                  <EnvironmentalMonitor />
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "reports" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">Reports</h1>
+              <Card>
+                <CardContent className="pt-6">
+                  <ReportGenerator />
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === "profile" && <Profile />}
+
+          {activeTab === "settings" && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-bold">Settings</h1>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-medium mb-4">
+                        Farm Information
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="farmName">Farm Name</Label>
+                          <Input
+                            id="farmName"
+                            defaultValue="Green Valley Poultry Farm"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="farmLocation">Farm Location</Label>
+                          <Input
+                            id="farmLocation"
+                            placeholder="Enter farm location"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="farmSize">
+                            Farm Size (sq. meters)
+                          </Label>
+                          <Input
+                            id="farmSize"
+                            type="number"
+                            placeholder="Enter farm size"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="birdCount">Number of Birds</Label>
+                          <Input
+                            id="birdCount"
+                            type="number"
+                            placeholder="Enter bird count"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-medium mb-4">
+                        Alert Preferences
+                      </h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="emailAlerts" className="mb-1 block">
+                              Email Alerts
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                              Receive alerts via email
+                            </p>
+                          </div>
+                          <Switch id="emailAlerts" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="smsAlerts" className="mb-1 block">
+                              SMS Alerts
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                              Receive alerts via SMS
+                            </p>
+                          </div>
+                          <Switch id="smsAlerts" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="pushAlerts" className="mb-1 block">
+                              Push Notifications
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                              Receive alerts via push notifications
+                            </p>
+                          </div>
+                          <Switch id="pushAlerts" defaultChecked />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-medium mb-4">
+                        System Settings
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="units">Measurement Units</Label>
+                          <Select defaultValue="metric">
+                            <SelectTrigger id="units">
+                              <SelectValue placeholder="Select units" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="metric">
+                                Metric (°C, kg)
+                              </SelectItem>
+                              <SelectItem value="imperial">
+                                Imperial (°F, lb)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="dataRetention">
+                            Data Retention Period
+                          </Label>
+                          <Select defaultValue="1year">
+                            <SelectTrigger id="dataRetention">
+                              <SelectValue placeholder="Select period" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="3months">3 Months</SelectItem>
+                              <SelectItem value="6months">6 Months</SelectItem>
+                              <SelectItem value="1year">1 Year</SelectItem>
+                              <SelectItem value="forever">Forever</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end space-x-4 pt-6">
+                      <Button variant="outline">Reset</Button>
+                      <Button>Save Settings</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+// Navigation Item Component
+const NavItem = ({ id, label, icon, active, onClick, sidebarCollapsed }) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  return (
+    <Button
+      variant={active ? "secondary" : "ghost"}
+      className={`justify-${sidebarCollapsed ? "center" : "start"} w-full ${
+        active ? "font-medium" : ""
+      } text-white hover:bg-navy-light relative`}
+      onClick={onClick}
+      title={sidebarCollapsed ? label : undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span className={sidebarCollapsed ? "" : "mr-2"}>{icon}</span>
+      {!sidebarCollapsed && <span>{label}</span>}
+      {sidebarCollapsed && isHovered && (
+        <span className="absolute left-14 bg-navy-light px-2 py-1 rounded whitespace-nowrap z-50 transition-opacity duration-200">
+          {label}
+        </span>
+      )}
+    </Button>
+  );
+};
+
+// Icon Components
+const HomeIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+  </svg>
+);
+
+const DataIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+    <polyline points="14 2 14 8 20 8"></polyline>
+    <line x1="16" y1="13" x2="8" y2="13"></line>
+    <line x1="16" y1="17" x2="8" y2="17"></line>
+    <line x1="10" y1="9" x2="8" y2="9"></line>
+  </svg>
+);
+
+const EnvironmentIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 9a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+    <path d="M12 3v2"></path>
+    <path d="M12 19v2"></path>
+    <path d="M4.22 5.64l1.41 1.41"></path>
+    <path d="M18.36 19.78l1.41 1.41"></path>
+    <path d="M3 12h2"></path>
+    <path d="M19 12h2"></path>
+    <path d="M4.22 18.36l1.41-1.41"></path>
+    <path d="M18.36 4.22l1.41-1.41"></path>
+  </svg>
+);
+
+const ReportIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+  </svg>
+);
+
+const ProfileIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+);
+
+export default Home;
+function logoutUser(): any {
+  throw new Error("Function not implemented.");
+}
