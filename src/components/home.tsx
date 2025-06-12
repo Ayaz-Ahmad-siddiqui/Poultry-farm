@@ -55,13 +55,6 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
     (state: RootState) => state.user
   );
 
-  // const handleLogout = () => {
-  //   const confirmation = confirm("loging Out");
-  //   if (confirmation) {
-  //     dispatch(logout());
-  //     navigate("/login", { replace: true });
-  //   }
-  // };
   const handleLogout = () => {
   const { id, dismiss } = toast({
     title: "Confirm Logout",

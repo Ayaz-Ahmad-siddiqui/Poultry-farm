@@ -81,7 +81,7 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
     createSuccess: envCreateSuccess,
     environments,
   } = useAppSelector((state) => state.environment);
-  const {
+  const { 
     loading: eggLoading,
     error: eggError,
     createSuccess: eggCreateSuccess,
@@ -227,6 +227,7 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
   }, [feedError, mortalityError, eggError, envError, activeTab, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("Submitting data for tab:", activeTab);
   e.preventDefault();
   const formattedDate = format(date, "yyyy-MM-dd");
   let submissionData: any;
@@ -240,6 +241,7 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
         time_of_feeding: feedData.timeOfFeeding,
         notes: feedData.notes,
       };
+  
       const result = await dispatch(createFeedUsage(submissionData));
       if (createFeedUsage.fulfilled.match(result)) {
         toast({ title: "Feed data submitted", description: "Feed usage recorded successfully.", variant: "success" });
