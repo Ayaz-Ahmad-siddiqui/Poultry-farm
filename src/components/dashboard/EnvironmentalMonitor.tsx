@@ -86,7 +86,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
     (state: RootState) => state.Matrics
   );
 
-  console.log("Fetched Data:", data);
+ 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -185,8 +185,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
     { time: "08:00 PM", humidity: 55, temp: 22 },
   ];
 
-  console.log("--- Historical Data for Chart ---", real_kHistoricalData);
-
+ 
   return (
     <Card className="w-full bg-primary/5 shadow-md border border-primary/20">
       <CardHeader className="pb-2">
