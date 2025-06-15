@@ -226,13 +226,13 @@ const Login = () => {
                   </strong>
                 </p>
               </div>
-              <div className="mt-6 text-sm text-center text-muted-foreground">
+              {/* <div className="mt-6 text-sm text-center text-muted-foreground">
                 <p>Demo credentials:</p>
                 <p>
                   Username: <strong>admin</strong>, Password:{" "}
                   <strong>password</strong>
                 </p>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
         </div>

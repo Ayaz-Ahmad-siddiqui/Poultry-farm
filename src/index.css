@@ -74,3 +74,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Make sure to include these specific selectors */
+.rdrCalendarWrapper .rdrDay.rdrDaySelected,
+.rdrCalendarWrapper .rdrDay.rdrDayInRange,
+.rdrCalendarWrapper .rdrDay.rdrDayStartOfRange,
+.rdrCalendarWrapper .rdrDay.rdrDayEndOfRange {
+  background-color: #22c55e !important; /* Tailwind green-500 */
+  color: white !important;
+}
+
+/* Text inside selected date */
+.rdrCalendarWrapper .rdrDay.rdrDaySelected span,
+.rdrCalendarWrapper .rdrDay.rdrDayInRange span,
+.rdrCalendarWrapper .rdrDay.rdrDayStartOfRange span,
+.rdrCalendarWrapper .rdrDay.rdrDayEndOfRange span {
+  color: white !important;
+}

@@ -40,6 +40,7 @@ interface TableProps {
   // You might want to add props for update/delete actions
   onUpdate?: (id: string, updatedData: Record<string, any>) => void;
   onDelete?: (id: string) => void;
+  editableDropdowns?: Record<string, { label: string; value: string }[]>;
 }
 
 const TableCrud = (props: TableProps) => {
@@ -133,36 +134,68 @@ const TableCrud = (props: TableProps) => {
                     {props.col.map((colName, i) => (
                       <TableCell key={i}>
                         {editingId === row.id ? (
-                          <Input
-                            // Smartly determine input type based on column name
-                            type={
-                              colName.toLowerCase().includes("time")
-                                ? "time"
-                                : colName.toLowerCase().includes("date")
-                                ? "date"
-                                : colName.toLowerCase().includes("quantity") ||
-                                  colName.toLowerCase().includes("count") ||
-                                  colName
-                                    .toLowerCase()
-                                    .includes("temperature") ||
-                                  colName.toLowerCase().includes("humidity")
-                                ? "number"
-                                : "text"
-                            }
-                            value={row[colName] ?? ""} // Use nullish coalescing to handle undefined values
-                            onChange={(e) =>
-                              handleInputChange(row.id, colName, e.target.value)
-                            }
-                            // Add step for number inputs if applicable (e.g., for quantity/temp/humidity)
-                            {...(colName.toLowerCase().includes("quantity") ||
-                            colName.toLowerCase().includes("temperature") ||
-                            colName.toLowerCase().includes("humidity")
-                              ? { step: "0.01" }
-                              : {})}
-                          />
+                          props.editableDropdowns &&
+                          props.editableDropdowns[colName] ? (
+                            <select
+                              value={row[colName] ?? ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  row.id,
+                                  colName,
+                                  e.target.value
+                                )
+                              }
+                              className="border px-2 py-1 rounded-md w-full"
+                            >
+                              <option value="" disabled>
+                                Select
+                              </option>
+                              {props.editableDropdowns[colName].map(
+                                (option) => (
+                                  <option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          ) : (
+                            <Input
+                              type={
+                                colName.toLowerCase().includes("time")
+                                  ? "time"
+                                  : colName.toLowerCase().includes("date")
+                                  ? "date"
+                                  : colName
+                                      .toLowerCase()
+                                      .includes("quantity") ||
+                                    colName.toLowerCase().includes("count") ||
+                                    colName
+                                      .toLowerCase()
+                                      .includes("temperature") ||
+                                    colName.toLowerCase().includes("humidity")
+                                  ? "number"
+                                  : "text"
+                              }
+                              value={row[colName] ?? ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  row.id,
+                                  colName,
+                                  e.target.value
+                                )
+                              }
+                              {...(colName.toLowerCase().includes("quantity") ||
+                              colName.toLowerCase().includes("temperature") ||
+                              colName.toLowerCase().includes("humidity")
+                                ? { step: "0.01" }
+                                : {})}
+                            />
+                          )
                         ) : (
-                          // Ensure value is not null/undefined for display
-                          String(row[colName] ?? "-") // Convert to string and fallback to '-'
+                          String(row[colName] ?? "-")
                         )}
                       </TableCell>
                     ))}

@@ -61,6 +61,21 @@ const Records = () => {
     { id: "environment", name: "Environment Control" },
   ];
 
+const editableDropdowns={
+  "Feed Type": [
+    { label: "Starter Feed", value: "Starter" },
+    { label: "Grower Feed", value: "Grower" },
+    { label: "Finisher Feed", value: "Finisher" },
+    { label: "Layer Feed", value: "Layer" },
+  ],
+  "Cause of Death": [
+    { label: "Disease", value: "disease" },
+    { label: "Injury", value: "injury" },
+    { label: "Predator", value: "predator" },
+    { label: "Unknown", value: "unknown" }
+  ]
+}
+
   const { feedUsages } = useAppSelector((state) => state.feedUsage);
 
   const { eggProductions } = useAppSelector((state) => state.eggProduction);
@@ -68,9 +83,6 @@ const Records = () => {
   const { mortalityRates } = useAppSelector((state) => state.mortalityRate);
 
   const { environments } = useAppSelector((state) => state.environment);
-
-
-  
 
   const getTableData = () => {
     switch (activeTab) {
@@ -284,6 +296,7 @@ const Records = () => {
                 Pagination={true}
                 onUpdate={handleTableUpdate}
                 onDelete={handleTableDelete}
+               editableDropdowns={editableDropdowns}
               />
             </div>
           </TabsContent>
