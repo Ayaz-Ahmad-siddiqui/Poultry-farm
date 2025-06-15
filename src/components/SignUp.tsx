@@ -73,7 +73,6 @@ const SignUp = () => {
   }
 }, [success, navigate, dispatch]);
 
-
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
@@ -89,6 +88,16 @@ const SignUp = () => {
       setFormError("All fields are required.");
       return;
     }
+
+     if (password.length < 6) {
+    toast({
+      title: "Password Too Short",
+      description: "Password must be at least 6 characters long.",
+      variant: "destructive",
+      duration: 3000,
+    });
+    return;
+  }
 
     try {
       const resultAction = await dispatch(signupUser({ name: username.trim(), email: email.trim(), password: password.trim() }));

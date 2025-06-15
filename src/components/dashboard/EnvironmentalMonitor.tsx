@@ -177,6 +177,15 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
       temp: parseFloat(item.temperature),
     })) ?? [];
 
+  // Real data for charts
+  const feedConsumptionData =
+    data?.feedUsage?.map((item: any) => ({
+      day: new Date(item.feed_date).toLocaleDateString("en-US", {
+        weekday: "short", // e.g., "Mon"
+      }),
+      amount: parseFloat(item.qty),
+    })) ?? [];
+
   const sampleHistoricalData = [
     // <--- This mock data
     { time: "08:00 AM", humidity: 60, temp: 25 },
@@ -214,7 +223,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
           <TabsList className="mb-4">
             <TabsTrigger value="current">Current Conditions</TabsTrigger>
             <TabsTrigger value="history">Historical Data</TabsTrigger>
-            <TabsTrigger value="settings">Alert Settings</TabsTrigger>
+            {/* <TabsTrigger value="settings">Alert Settings</TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="current" className="space-y-4">
@@ -354,12 +363,55 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
                       <CardHeader>
                         <CardTitle>Historical Environmental Data</CardTitle>
                       </CardHeader>
-                      <CardContent className="h-[300px] items-center flex justify-center">
+                      <CardContent className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
-                          <TemperatureHumidityPieChart
-                            data={sampleHistoricalData} 
-                            selectedTime="10:00" 
-                          />
+                          <AreaChart
+                            data={feedConsumptionData}
+                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                          >
+                            <defs>
+                              <linearGradient
+                                id="colorAmount"
+                                x1="0"
+                                y1="0"
+                                x2="0"
+                                y2="1"
+                              >
+                                <stop
+                                  offset="5%"
+                                  stopColor="hsl(var(--primary))"
+                                  stopOpacity={0.8}
+                                />
+                                <stop
+                                  offset="95%"
+                                  stopColor="hsl(var(--primary))"
+                                  stopOpacity={0.1}
+                                />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              opacity={0.1}
+                            />
+                            <XAxis dataKey="day" />
+                            <YAxis unit=" kg" />
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "hsl(var(--background))",
+                                borderColor: "hsl(var(--border))",
+                                borderRadius: "var(--radius)",
+                              }}
+                            />
+                            <Area
+                              type="monotone"
+                              dataKey="amount"
+                              stroke="hsl(var(--primary))"
+                              fillOpacity={1}
+                              fill="url(#colorAmount)"
+                              name="Feed Used"
+                              unit=" kg"
+                            />
+                          </AreaChart>
                         </ResponsiveContainer>
                       </CardContent>
                     </Card>
@@ -401,7 +453,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
             </div>
           </TabsContent>
 
-          <TabsContent value="settings">
+          {/* <TabsContent value="settings">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
@@ -420,7 +472,6 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Temperature Alert Range (°C)</Label>{" "}
-                  {/* Corrected typo */}
                   <Slider
                     defaultValue={tempThreshold}
                     min={0}
@@ -455,7 +506,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
                 Settings
               </Button>
             </div>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </CardContent>
     </Card>

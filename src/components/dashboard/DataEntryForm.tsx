@@ -681,9 +681,9 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
                 >
                   Reset Form
                 </Button>
-                <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
+                {/* <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
                   {TableIsHidden === true ? "Hide Table" : "Show Table ↓"}
-                </Button>
+                </Button> */}
               </form>
             </TabsContent>
 
@@ -763,9 +763,9 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
                 >
                   Reset Form
                 </Button>
-                <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
+                {/* <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
                   {TableIsHidden === true ? "Hide Table" : "Show Table ↓"}
-                </Button>
+                </Button> */}
               </form>
             </TabsContent>
 
@@ -837,9 +837,9 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
                 >
                   Reset Form
                 </Button>
-                <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
+                {/* <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
                   {TableIsHidden === true ? "Hide Table" : "Show Table ↓"}
-                </Button>
+                </Button> */}
               </form>
             </TabsContent>
 
@@ -918,9 +918,9 @@ const DataEntryForm = ({ onSubmit = () => {} }: DataEntryFormProps) => {
                 >
                   Reset Form
                 </Button>
-                <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
+                {/* <Button type="button" variant="ghost" className="mx-6 hover:bg-blue-50" onClick={() => setTableIsHidden(!TableIsHidden)}>
                   {TableIsHidden === true ? "Hide Table" : "Show Table ↓"}
-                </Button>
+                </Button> */}
               </form>
             </TabsContent>
           </Tabs>
