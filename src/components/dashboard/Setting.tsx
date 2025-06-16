@@ -49,8 +49,6 @@ const Settings = () => {
   const [lastResult, setLastResult] = useState<any>(null);
 
   useEffect(() => {
-   
-
     // Always load settingsData from localStorage on mount
     const settingsData = localStorage.getItem("settingsData");
     if (settingsData) {
