@@ -7,6 +7,7 @@ import feedUsageReducer from "./slices/dataEntry/feedUsageSlice";
 import environmentReducer from "./slices/dataEntry/environmentSlice";
 import eggProductionReducer from "./slices/dataEntry/eggProductionSlice";
 import mortalityRateReducer from "./slices/dataEntry/mortalityRateSlice";
+import settingsReducer from "./slices/settings/SettingsSlice"; 
 
 
 export const store = configureStore({
@@ -19,6 +20,7 @@ export const store = configureStore({
     environment: environmentReducer, 
     eggProduction: eggProductionReducer, 
     mortalityRate: mortalityRateReducer, 
+    settingsSlice: settingsReducer,
   },
 });
 

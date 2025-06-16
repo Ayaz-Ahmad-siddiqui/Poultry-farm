@@ -1,6 +1,5 @@
-// src/redux/slices/profile/userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axiosInstance from "../../../API/axiosInstance"; // Adjust path as needed
+import axiosInstance from "../../../API/axiosInstance"; 
 
 // Define the shape of your user profile data
 interface UserProfile {

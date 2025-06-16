@@ -1,4 +1,4 @@
-  import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import Profile from "@/components/Profile";
@@ -42,6 +42,7 @@ import { useAppDispatch, useAppSelector } from "../redux/Hooks/Hooks";
 import { fetchUserProfile } from "../redux/slices/profile/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import Setting from "./dashboard/Setting";
 
 interface HomeProps {
   initialTab?: string;
@@ -53,7 +54,7 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [personalInfo, setPersonalInfo] = useState({
-    name: ""
+    name: "",
   });
     const [showDateRange, setShowDateRange] = useState(false);
     const [isDateFiltered, setIsDateFiltered] = useState(false);
@@ -80,7 +81,7 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
   useEffect(() => {
     if (profile) {
       setPersonalInfo({
-        name: profile.name || ""
+        name: profile.name || "",
       });
     }
   }, [profile]);
@@ -344,17 +345,19 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={
-                        personalInfo?.name.split(" ").slice(0,2).join(" ") ||
+                        personalInfo?.name.split(" ").slice(0, 2).join(" ") ||
                         "https://api.dicebear.com/7.x/avataaars/svg?seed=farmer"
                       }
                       alt={personalInfo.name || "User"}
                     />
                     <AvatarFallback>
-                      {personalInfo?.name?.substring(0, 2).toUpperCase() || "JD"}
+                      {personalInfo?.name?.substring(0, 2).toUpperCase() ||
+                        "JD"}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden md:inline">
-                    {personalInfo?.name.split(" ").slice(0,2).join(" ") || "Loading..."}
+                    {personalInfo?.name.split(" ").slice(0, 2).join(" ") ||
+                      "Loading..."}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
@@ -466,142 +469,7 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
 
           {activeTab === "profile" && <Profile />}
 
-          {activeTab === "settings" && (
-            <div className="space-y-6">
-              <h1 className="text-2xl font-bold">Settings</h1>
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-medium mb-4">
-                        Farm Information
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="farmName">Farm Name</Label>
-                          <Input
-                            id="farmName"
-                            defaultValue="Green Valley Poultry Farm"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="farmLocation">Farm Location</Label>
-                          <Input
-                            id="farmLocation"
-                            placeholder="Enter farm location"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="farmSize">
-                            Farm Size (sq. meters)
-                          </Label>
-                          <Input
-                            id="farmSize"
-                            type="number"
-                            placeholder="Enter farm size"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="birdCount">Number of Birds</Label>
-                          <Input
-                            id="birdCount"
-                            type="number"
-                            placeholder="Enter bird count"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-t pt-6">
-                      <h3 className="text-lg font-medium mb-4">
-                        Alert Preferences
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="emailAlerts" className="mb-1 block">
-                              Email Alerts
-                            </Label>
-                            <p className="text-sm text-muted-foreground">
-                              Receive alerts via email
-                            </p>
-                          </div>
-                          <Switch id="emailAlerts" defaultChecked />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="smsAlerts" className="mb-1 block">
-                              SMS Alerts
-                            </Label>
-                            <p className="text-sm text-muted-foreground">
-                              Receive alerts via SMS
-                            </p>
-                          </div>
-                          <Switch id="smsAlerts" />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="pushAlerts" className="mb-1 block">
-                              Push Notifications
-                            </Label>
-                            <p className="text-sm text-muted-foreground">
-                              Receive alerts via push notifications
-                            </p>
-                          </div>
-                          <Switch id="pushAlerts" defaultChecked />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-t pt-6">
-                      <h3 className="text-lg font-medium mb-4">
-                        System Settings
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="units">Measurement Units</Label>
-                          <Select defaultValue="metric">
-                            <SelectTrigger id="units">
-                              <SelectValue placeholder="Select units" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="metric">
-                                Metric (°C, kg)
-                              </SelectItem>
-                              <SelectItem value="imperial">
-                                Imperial (°F, lb)
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="dataRetention">
-                            Data Retention Period
-                          </Label>
-                          <Select defaultValue="1year">
-                            <SelectTrigger id="dataRetention">
-                              <SelectValue placeholder="Select period" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="3months">3 Months</SelectItem>
-                              <SelectItem value="6months">6 Months</SelectItem>
-                              <SelectItem value="1year">1 Year</SelectItem>
-                              <SelectItem value="forever">Forever</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-4 pt-6">
-                      <Button variant="outline">Reset</Button>
-                      <Button>Save Settings</Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          {activeTab === "settings" && <Setting />}
         </div>
       </main>
     </div>
