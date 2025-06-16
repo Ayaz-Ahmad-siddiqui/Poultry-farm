@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import Profile from "@/components/Profile";
@@ -11,6 +11,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { format } from "date-fns";
+import { DateRange } from "react-date-range";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import {
   Select,
@@ -47,12 +49,23 @@ interface HomeProps {
 }
 
 const Home = ({ initialTab = "dashboard" }: HomeProps) => {
+  const dateRangeRef = useRef(null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [personalInfo, setPersonalInfo] = useState({
     name: "",
   });
+    const [showDateRange, setShowDateRange] = useState(false);
+    const [isDateFiltered, setIsDateFiltered] = useState(false);
+     const [state, setState] = useState([
+        {
+          startDate: new Date(),
+          endDate: null,
+          key: "selection",
+        },
+      ]);
+      
   const navigate = useNavigate();
   const { logout: logoutAction } = useAuth();
 
@@ -319,9 +332,9 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
         <header className="h-16 border-b border-primary/20 flex items-center justify-between px-4 md:px-6">
           <h2 className="text-lg font-medium">Green Valley Poultry Farm</h2>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon">
+            {/* <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
-            </Button>
+            </Button> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -375,6 +388,38 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
           {activeTab === "dashboard" && (
             <div className="space-y-6">
               <h1 className="text-2xl font-bold">Dashboard</h1>
+               <div className="flex gap-2">
+                        <Button variant="outline" onClick={() => setIsDateFiltered(false)}>
+                          Clear Filter
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowDateRange((prev) => !prev)}
+                        >
+                          {state[0].startDate
+                            ? format(state[0].startDate, "PP")
+                            : "Select Date"}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => setShowDateRange((prev) => !prev)}
+                        >
+                          Continuous
+                        </Button>
+                        {showDateRange && (
+                           <div ref={dateRangeRef} className="absolute z-50 mt-2">
+                          <DateRange
+                            editableDateInputs={true}
+                            onChange={(item) => {
+                              setState([item.selection]);
+                              setIsDateFiltered(true);
+                            }}
+                            moveRangeOnFirstSelection={false}
+                            ranges={state}
+                          />
+                        </div>
+                        )}
+                      </div>
               <KeyMetricsPanel />
             </div>
           )}

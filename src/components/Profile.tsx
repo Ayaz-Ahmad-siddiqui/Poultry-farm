@@ -278,7 +278,7 @@ const Profile = () => {
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="personal">Personal Info</TabsTrigger>
               <TabsTrigger value="security">Security</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
+              {/* <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
             </TabsList>
 
             <TabsContent value="personal" className="mt-6">
@@ -384,11 +384,8 @@ const Profile = () => {
               </form>
             </TabsContent>
 
-            <TabsContent value="notifications" className="mt-6">
-              {/* Note: Notifications typically require backend storage/update.
-                  If these are client-side only settings, no API integration needed here.
-                  If they need to be saved, create a separate thunk for them. */}
-              <form> {/* No onSubmit for now if purely client-side */}
+            {/* <TabsContent value="notifications" className="mt-6">
+              <form>
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -402,8 +399,6 @@ const Profile = () => {
                         Receive notifications via email
                       </p>
                     </div>
-                    {/* Using Input type="checkbox" as in your original code.
-                        Consider using the Switch component provided by shadcn/ui consistently. */}
                     <Input
                         type="checkbox"
                         id="emailNotifications"
@@ -461,12 +456,11 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* If notifications are server-side, this button would submit a form */}
                 <Button type="submit" className="mt-6" disabled={loading}>
                   Save Notification Preferences
                 </Button>
               </form>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </CardContent>
         <CardFooter className="border-t pt-6">
