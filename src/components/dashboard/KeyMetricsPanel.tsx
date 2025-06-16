@@ -10,6 +10,7 @@ import {
   TrendingUpIcon,
   TrendingDownIcon,
 } from "lucide-react";
+import LinearProgress from '@mui/material/LinearProgress';
 import {
   AreaChart,
   Area,
@@ -89,7 +90,7 @@ const KeyMetricsPanel = () => {
     (state: RootState) => state.Matrics
   );
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LinearProgress color="success" />;
   if (error) return <div>Error: {error}</div>;
   if (!data || !data.feedUsage) return <div>No data available</div>;
 

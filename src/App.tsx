@@ -7,13 +7,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import routes from "tempo-routes";
 import SignUp from "./components/SignUp";
+import LinearProgress from '@mui/material/LinearProgress';
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
     <AuthProvider>
       <Toaster /> {/* Required for showing toast */}
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<LinearProgress color="success" />}>
         <>
           <Routes>
             <Route path="/login" element={<Login />} />

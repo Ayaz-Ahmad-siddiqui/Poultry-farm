@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,  
+  CardHeader,
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
-import { CheckCircle, Upload, AlertCircle } from "lucide-react"; 
+import { CheckCircle, Upload, AlertCircle } from "lucide-react";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
@@ -30,9 +30,8 @@ import {
 const Profile = () => {
   // Redux state for profile
   const dispatch = useDispatch<AppDispatch>();
-  const { profile, loading, error, updateSuccess, passwordChangeSuccess } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { profile, loading, error, updateSuccess, passwordChangeSuccess } =
+    useSelector((state: RootState) => state.user);
 
   // Local UI states
   const [activeTab, setActiveTab] = useState("personal");
@@ -47,7 +46,6 @@ const Profile = () => {
     position: "",
   });
 
-  
   const [securityInfo, setSecurityInfo] = useState({
     currentPassword: "",
     newPassword: "",
@@ -71,7 +69,6 @@ const Profile = () => {
     dispatch(clearPasswordChangeSuccess());
     setLocalError(null);
     setShowLocalSuccess(false);
-
   }, [dispatch]);
 
   // 2. Populate form when profile data is loaded from Redux
@@ -109,7 +106,11 @@ const Profile = () => {
         dispatch(clearPasswordChangeSuccess()); // Clear success state in Redux after showing
       }, 3000); // Show success message for 3 seconds
       // Also clear password fields after successful change
-      setSecurityInfo({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setSecurityInfo({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
       return () => clearTimeout(timer);
     }
   }, [passwordChangeSuccess, dispatch]);
@@ -122,8 +123,14 @@ const Profile = () => {
     if (localError) {
       setLocalError(null);
     }
-  }, [personalInfo, securityInfo, notificationSettings, error, localError, dispatch]);
-
+  }, [
+    personalInfo,
+    securityInfo,
+    notificationSettings,
+    error,
+    localError,
+    dispatch,
+  ]);
 
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -141,7 +148,11 @@ const Profile = () => {
     setShowLocalSuccess(false); // Hide success message
 
     // Client-side validation
-    if (!personalInfo.name.trim() || !personalInfo.phoneNo?.trim() || !personalInfo.position?.trim()) {
+    if (
+      !personalInfo.name.trim() ||
+      !personalInfo.phoneNo?.trim() ||
+      !personalInfo.position?.trim()
+    ) {
       setLocalError("Name, Phone Number, and Position are required.");
       return;
     }
@@ -171,7 +182,11 @@ const Profile = () => {
     setShowLocalSuccess(false); // Hide success message
 
     // Client-side validation
-    if (!securityInfo.currentPassword || !securityInfo.newPassword || !securityInfo.confirmPassword) {
+    if (
+      !securityInfo.currentPassword ||
+      !securityInfo.newPassword ||
+      !securityInfo.confirmPassword
+    ) {
       setLocalError("All password fields are required.");
       return;
     }
@@ -179,9 +194,10 @@ const Profile = () => {
       setLocalError("New password and confirm password do not match.");
       return;
     }
-    if (securityInfo.newPassword.length < 6) { // Example: minimum password length
-        setLocalError("New password must be at least 6 characters long.");
-        return;
+    if (securityInfo.newPassword.length < 6) {
+      // Example: minimum password length
+      setLocalError("New password must be at least 6 characters long.");
+      return;
     }
 
     try {
@@ -202,27 +218,48 @@ const Profile = () => {
     }
   };
 
- 
   const handleSaveAllChanges = () => {
     if (activeTab === "personal") {
-      handlePersonalSubmit(new Event('submit') as unknown as React.FormEvent);
+      handlePersonalSubmit(new Event("submit") as unknown as React.FormEvent);
     } else if (activeTab === "security") {
-      handlePasswordChangeSubmit(new Event('submit') as unknown as React.FormEvent);
+      handlePasswordChangeSubmit(
+        new Event("submit") as unknown as React.FormEvent
+      );
     }
-   
   };
 
   return (
     <div className="container max-w-4xl mx-auto py-6">
       <div className="flex flex-col md:flex-row items-start gap-6 mb-8">
         <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-32 w-32 border-4 border-primary/20">
+          {/* <Avatar className="h-32 w-32 border-4 border-primary/20">
             <AvatarImage
               src={profile?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=farmer"}
               alt={profile?.name || "User"}
             />
             <AvatarFallback className="text-4xl">
               {profile?.name?.substring(0, 2).toUpperCase() || "JD"}
+            </AvatarFallback>
+          </Avatar> */}
+          <Avatar
+            className="h-28 w-28 border-4 border-primary/20 text-5xl lg:text-4xl
+"
+          >
+            <AvatarImage
+              src={
+                personalInfo?.name.split(" ").slice(0, 2).join(" ") ||
+                "https://api.dicebear.com/7.x/avataaars/svg?seed=farmer"
+              }
+              alt={personalInfo.name || "User"}
+            />
+            <AvatarFallback>
+              {(
+                personalInfo?.name
+                  ?.split(" ")
+                  .slice(0, 2)
+                  .map((n) => n[0])
+                  .join("") || "JD"
+              ).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <Button
@@ -237,7 +274,9 @@ const Profile = () => {
 
         <div className="flex-1">
           <h1 className="text-3xl font-bold">{profile?.name || "John Doe"}</h1>
-          <p className="text-muted-foreground">{profile?.position || "Farm Manager"}</p>
+          <p className="text-muted-foreground">
+            {profile?.position || "Farm Manager"}
+          </p>
           <p className="mt-4 text-sm">
             Manage your account settings, update your profile information, and
             configure your notification preferences.
@@ -246,12 +285,14 @@ const Profile = () => {
       </div>
 
       {/* Conditional Success and Error Alerts */}
-      {(showLocalSuccess && (updateSuccess || passwordChangeSuccess)) && (
+      {showLocalSuccess && (updateSuccess || passwordChangeSuccess) && (
         <Alert className="mb-6 bg-green-50 border-green-200">
           <CheckCircle className="h-4 w-4 text-green-600" />
           <AlertDescription className="text-green-600">
-            {updateSuccess && "Your personal information has been updated successfully!"}
-            {passwordChangeSuccess && "Your password has been changed successfully!"}
+            {updateSuccess &&
+              "Your personal information has been updated successfully!"}
+            {passwordChangeSuccess &&
+              "Your password has been changed successfully!"}
           </AlertDescription>
         </Alert>
       )}
@@ -259,12 +300,9 @@ const Profile = () => {
       {(error || localError) && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            {error || localError}
-          </AlertDescription>
+          <AlertDescription>{error || localError}</AlertDescription>
         </Alert>
       )}
-
 
       <Card>
         <CardHeader>
@@ -282,7 +320,9 @@ const Profile = () => {
             </TabsList>
 
             <TabsContent value="personal" className="mt-6">
-              <form onSubmit={handlePersonalSubmit}> {/* Use specific handler */}
+              <form onSubmit={handlePersonalSubmit}>
+                {" "}
+                {/* Use specific handler */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
@@ -297,7 +337,7 @@ const Profile = () => {
 
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                   
+
                     <Input
                       id="email"
                       name="email"
@@ -308,7 +348,8 @@ const Profile = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phoneNo">Phone Number</Label> {/* Corrected name from 'phone' to 'phoneNo' to match API */}
+                    <Label htmlFor="phoneNo">Phone Number</Label>{" "}
+                    {/* Corrected name from 'phone' to 'phoneNo' to match API */}
                     <Input
                       id="phoneNo"
                       name="phoneNo"
@@ -329,7 +370,6 @@ const Profile = () => {
                     />
                   </div>
                 </div>
-
                 <Button type="submit" className="mt-6" disabled={loading}>
                   {loading ? "Saving..." : "Save Personal Information"}
                 </Button>
@@ -337,7 +377,9 @@ const Profile = () => {
             </TabsContent>
 
             <TabsContent value="security" className="mt-6">
-              <form onSubmit={handlePasswordChangeSubmit}> {/* Use specific handler */}
+              <form onSubmit={handlePasswordChangeSubmit}>
+                {" "}
+                {/* Use specific handler */}
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="currentPassword">Current Password</Label>
@@ -377,7 +419,6 @@ const Profile = () => {
                     />
                   </div>
                 </div>
-
                 <Button type="submit" className="mt-6" disabled={loading}>
                   {loading ? "Updating..." : "Update Password"}
                 </Button>
@@ -465,8 +506,17 @@ const Profile = () => {
         </CardContent>
         <CardFooter className="border-t pt-6">
           <div className="flex justify-between w-full">
-            <Button variant="outline" onClick={() => dispatch(fetchUserProfile())} disabled={loading}>Cancel</Button> {/* Revert to fetched profile */}
-            <Button onClick={handleSaveAllChanges} disabled={loading}>Save All Changes</Button>
+            <Button
+              variant="outline"
+              onClick={() => dispatch(fetchUserProfile())}
+              disabled={loading}
+            >
+              Cancel
+            </Button>{" "}
+            {/* Revert to fetched profile */}
+            <Button onClick={handleSaveAllChanges} disabled={loading}>
+              Save All Changes
+            </Button>
           </div>
         </CardFooter>
       </Card>

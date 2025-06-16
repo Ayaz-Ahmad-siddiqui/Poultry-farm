@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import LinearProgress from "@mui/material/LinearProgress";
 import {
   Select,
   SelectContent,
@@ -56,16 +57,16 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
   const [personalInfo, setPersonalInfo] = useState({
     name: "",
   });
-    const [showDateRange, setShowDateRange] = useState(false);
-    const [isDateFiltered, setIsDateFiltered] = useState(false);
-     const [state, setState] = useState([
-        {
-          startDate: new Date(),
-          endDate: null,
-          key: "selection",
-        },
-      ]);
-      
+  const [showDateRange, setShowDateRange] = useState(false);
+  const [isDateFiltered, setIsDateFiltered] = useState(false);
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+
   const navigate = useNavigate();
   const { logout: logoutAction } = useAuth();
 
@@ -134,6 +135,27 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
       window.removeEventListener("resize", checkIfMobile);
     };
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dateRangeRef.current &&
+        !dateRangeRef.current.contains(event.target as Node)
+      ) {
+        setShowDateRange(false);
+      }
+    };
+
+    if (showDateRange) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDateRange]);
 
   return (
     <div className="flex h-screen bg-background">
@@ -351,8 +373,13 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
                       alt={personalInfo.name || "User"}
                     />
                     <AvatarFallback>
-                      {personalInfo?.name?.substring(0, 2).toUpperCase() ||
-                        "JD"}
+                      {(
+                        personalInfo?.name
+                          ?.split(" ")
+                          .slice(0, 2)
+                          .map((n) => n[0])
+                          .join("") || "JD"
+                      ).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden md:inline">
@@ -388,38 +415,35 @@ const Home = ({ initialTab = "dashboard" }: HomeProps) => {
           {activeTab === "dashboard" && (
             <div className="space-y-6">
               <h1 className="text-2xl font-bold">Dashboard</h1>
-               <div className="flex gap-2">
-                        <Button variant="outline" onClick={() => setIsDateFiltered(false)}>
-                          Clear Filter
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={() => setShowDateRange((prev) => !prev)}
-                        >
-                          {state[0].startDate
-                            ? format(state[0].startDate, "PP")
-                            : "Select Date"}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          onClick={() => setShowDateRange((prev) => !prev)}
-                        >
-                          Continuous
-                        </Button>
-                        {showDateRange && (
-                           <div ref={dateRangeRef} className="absolute z-50 mt-2">
-                          <DateRange
-                            editableDateInputs={true}
-                            onChange={(item) => {
-                              setState([item.selection]);
-                              setIsDateFiltered(true);
-                            }}
-                            moveRangeOnFirstSelection={false}
-                            ranges={state}
-                          />
-                        </div>
-                        )}
-                      </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowDateRange((prev) => !prev)}
+                >
+                  {state[0].startDate
+                    ? format(state[0].startDate, "PP")
+                    : "Select Date"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowDateRange((prev) => !prev)}
+                >
+                  Continuous
+                </Button>
+                {showDateRange && (
+                  <div ref={dateRangeRef} className="absolute z-50 mt-2">
+                    <DateRange
+                      editableDateInputs={true}
+                      onChange={(item) => {
+                        setState([item.selection]);
+                        setIsDateFiltered(true);
+                      }}
+                      moveRangeOnFirstSelection={false}
+                      ranges={state}
+                    />
+                  </div>
+                )}
+              </div>
               <KeyMetricsPanel />
             </div>
           )}

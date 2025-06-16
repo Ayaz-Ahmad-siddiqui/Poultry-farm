@@ -22,7 +22,7 @@ import {
   Settings,
   RefreshCw,
 } from "lucide-react";
-
+import LinearProgress from '@mui/material/LinearProgress';
 // Charts
 import {
   AreaChart,
@@ -88,7 +88,7 @@ const EnvironmentalMonitor: React.FC<EnvironmentalMonitorProps> = ({
 
  
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LinearProgress color="success" />;
   if (error) return <div>Error: {error}</div>;
   if (!data || !data.feedUsage || !data.environment)
     return <div>No data available</div>; // Added data.environment check
